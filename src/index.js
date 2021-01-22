@@ -1,5 +1,5 @@
 const express  = require('express');
-
+const {uuid} = require('uuidv4')
 const app = express();
 
 /*
@@ -11,34 +11,58 @@ const app = express();
 
 app.use(express.json());
 
-app.get('/projects', (request, response) =>{
-    const query = request.query;
-    console.log(query);
+const datas = [];
 
-    return response.json([
-        'Project 1',
-        'Project 2'
-    ]);
+app.get('/projects', (request, response) =>{
+    // const query = request.query;
+    // console.log(query);
+
+    return response.json(datas);
     //Always will return a JSON response.
 });
 
+
 app.post('/projects', (request, response) => {
-    const {title, name} = request.body;
-        console.log(title, name)
+    const {title, owner} = request.body;
+    const projects = {
+        id: uuid(),
+        title,
+        owner
+    }
+
+    datas.push(projects);
+    return response.json(projects);
 });
 
 app.put('/projects/:id', (request, response) => {
-    const params = request.params;
-    console.log(params, requestbody);
+    const { id } = request.params;
+    const { title, owner } = request.body; 
+    
+    const projectposition = datas.findIndex(project => project.id === id);
 
-    return response.json({message: "Data refresed."});
+    if(projectposition < 0){
+        return response.send('Not Found!');
+    }
+    const project = {
+        id,
+        title,
+        owner
+    }
+
+    datas[projectposition] = project;
+    return response.json(project);
 });
 
 app.delete('/projects/:id', (request, response) => {
-    const params = request.params;
-    console.log(params);
+    const { id } = request.params;
+    const projectposition = datas.findIndex(project => project.id === id );
 
-    return response.json({message: "Data deleted."})
+    if(projectposition < 0){
+        return response.send('Not found!');
+    }
+
+    datas.splice(projectposition);
+    return response.send('Removido!');
 })
 
 app.listen(3333, () => {
