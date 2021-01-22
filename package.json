@@ -5,8 +5,12 @@
   "repository": "https://github.com/andersonarorjdev/NodeJS-Studies",
   "author": "andersonarorjdev <anderson.r.o.r.jr@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
   "devDependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7"
   },
   "dependencies": {
     "@types/express": "^4.17.11"
